@@ -14,22 +14,18 @@ const Bottom = () => {
     //页面变化后的高度
     const [showHeight, setShowHeight] = useState(null)
 
-    useEffect(() => {
+    /*useEffect(() => {
         //第一次加载底部导航, 获取页面的最初实际高度, 设置clientHeight的值
         setClientHeight(document.documentElement.clientHeight);
         setShowHeight(document.documentElement.clientHeight);
 
-        let view = document.querySelector('meta[name="viewport"]');
-        view.setAttribute('content', `height=${document.documentElement.clientHeight},width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no`)
-        console.log(view);
-
         window.onresize = () => {
             //如果输入框在页面下面的位置，键盘弹起后，会遮挡住要输入的区域，只有开始输入的时候才会滚动到输入的位置，用户体验非常不好。
-            /*if (document.activeElement.tagName == "INPUT" || document.activeElement.tagName == "TEXTAREA") {
+            /!*if (document.activeElement.tagName == "INPUT" || document.activeElement.tagName == "TEXTAREA") {
                 window.setTimeout(function () {
                     document.activeElement.scrollIntoViewIfNeeded();
                 }, 0);
-            }*/
+            }*!/
 
             return (() => {
                 //页面高度变化后, 设置showHeight的值
@@ -41,7 +37,13 @@ const Bottom = () => {
             window.onresize = () => {
             }
         }
-    }, [])
+    }, [])*/
+
+    useEffect(() => {
+      let view = document.querySelector('meta[name="viewport"]');
+      view.setAttribute('content', `height=${document.documentElement.clientHeight},width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no`)
+      console.log(view);
+    },[])
 
     const setRouteActive = (value) => {
         navigate(value)
