@@ -73,10 +73,10 @@ const Bottom = () => {
         },
     ]
 
-    if (showHeight && clientHeight && showHeight < (clientHeight - 10)) {
+    /*if (showHeight && clientHeight && showHeight < (clientHeight - 10)) {
         //如果页面变化后的高度 小于 最初的高度, 那么返回一个空页面
         return <div></div>
-    }
+    }*/
 
     return (
         <TabBar activeKey={pathname} onChange={value => setRouteActive(value)}>
