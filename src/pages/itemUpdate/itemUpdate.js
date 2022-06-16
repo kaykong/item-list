@@ -3,142 +3,141 @@ import {AutoComplete, Input} from "antd";
 import {useEffect, useState} from "react";
 import './index.scss'
 import {fetchGet} from "../../utils/fetch";
+import {updateItemApi} from "./api";
 
 export const ItemUpdate = (props) => {
 
-    const [deleteLoading, setDeleteLoading] = useState(false)
-    const [updateLoading, setUpdateLoading] = useState(false)
-    const [loading, setLoading] = useState(false)
-    const [name, setName] = useState(props.name)
-    const [position, setPosition] = useState(props.position)
-    const [category, setCategory] = useState(props.category)
-    const [count, setCount] = useState(props.count)
-    const [itemId, setItemId] = useState(props._id)
+  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [updateLoading, setUpdateLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [name, setName] = useState(props.name)
+  const [position, setPosition] = useState(props.position)
+  const [category, setCategory] = useState(props.category)
+  const [count, setCount] = useState(props.count)
+  const [itemId, setItemId] = useState(props._id)
 
-    useEffect(() => {
-        setName(props.name)
-        setPosition(props.position)
-        setCategory(props.category)
-        setCount(props.count)
-        setItemId(props._id)
-    }, [props])
+  useEffect(() => {
+    setName(props.name)
+    setPosition(props.position)
+    setCategory(props.category)
+    setCount(props.count)
+    setItemId(props._id)
+  }, [props])
 
 
+  const updateItem = async () => {
 
-    const updateItem = async () => {
-
-        if (!name) {
-            Toast.show({
-                content: '请输入物品名称',
-                position: 'bottom',
-            })
-            return
-        }
-
-        if (!position) {
-            Toast.show({
-                content: '请输入存储位置',
-                position: 'bottom',
-            })
-            return
-        }
-
-        if (!category) {
-            Toast.show({
-                content: '请输入物品分类',
-                position: 'bottom',
-            })
-            return
-        }
-
-        if (!count) {
-            Toast.show({
-                content: '请输入物品数量',
-                position: 'bottom',
-            })
-            return
-        }
-
-        setUpdateLoading(true)
-        let values = {
-            _id: itemId,
-            name,
-            position,
-            category,
-            count,
-            update_time: Date.now()
-        }
-        console.log('deleteItem', values)
-        let response = await fetchGet('/release/mongoDB?methodName=itemList_update',
-            {
-                params: values
-            })
-        setUpdateLoading(false)
-        if (response.status === 110) {
-            console.log(response)
-            Toast.show({
-                content: response.statusText,
-                position: 'bottom',
-            })
-            return
-        }
-
-        if (response.body && response.body.update) {
-            Toast.show({
-                content: '更新成功',
-                position: 'bottom',
-            })
-            // window.location.href = '/';
-        } else {
-            Toast.show({
-                content: response.statusText,
-                position: 'bottom',
-            })
-        }
+    if (!name) {
+      Toast.show({
+        content: '请输入物品名称',
+        position: 'bottom',
+      })
+      return
     }
 
-    const deleteItem = async () => {
-        setDeleteLoading(true)
-        let values = {
-            _id: itemId
-        }
-        console.log('deleteItem', values)
-        let response = await fetchGet('/release/mongoDB?methodName=itemList_delete',
-            {
-                params: values
-            })
-        setDeleteLoading(false)
-        if (response.status === 110) {
-            console.log(response)
-            Toast.show({
-                content: response.statusText,
-                position: 'bottom',
-            })
-            return
-        }
-
-        if (response.body && response.body.delete) {
-            Toast.show({
-                content: '删除成功',
-                position: 'bottom',
-            })
-            // window.location.href = '/';
-        } else {
-            Toast.show({
-                content: response.statusText,
-                position: 'bottom',
-            })
-        }
-
+    if (!position) {
+      Toast.show({
+        content: '请输入存储位置',
+        position: 'bottom',
+      })
+      return
     }
 
+    if (!category) {
+      Toast.show({
+        content: '请输入物品分类',
+        position: 'bottom',
+      })
+      return
+    }
 
-    console.log(props.name)
+    if (!count) {
+      Toast.show({
+        content: '请输入物品数量',
+        position: 'bottom',
+      })
+      return
+    }
 
-    return (
-        <div>
-            <div className='item-update'>
-                {/*<Form
+    setUpdateLoading(true)
+    let values = {
+      _id: itemId,
+      name,
+      position,
+      category,
+      count,
+      update_time: Date.now()
+    }
+    console.log('deleteItem', values)
+
+
+    let response = await updateItemApi(values)
+    setUpdateLoading(false)
+    if (response.status === 110) {
+      console.log(response)
+      Toast.show({
+        content: response.statusText,
+        position: 'bottom',
+      })
+      return
+    }
+
+    if (response && response.update) {
+      Toast.show({
+        content: '更新成功',
+        position: 'bottom',
+      })
+      // window.location.href = '/';
+    } else {
+      Toast.show({
+        content: response.statusText,
+        position: 'bottom',
+      })
+    }
+  }
+
+  const deleteItem = async () => {
+    setDeleteLoading(true)
+    let values = {
+      _id: itemId
+    }
+    console.log('deleteItem', values)
+    let response = await fetchGet('/release/mongoDB?methodName=itemList_delete',
+      {
+        params: values
+      })
+    setDeleteLoading(false)
+    if (response.status === 110) {
+      console.log(response)
+      Toast.show({
+        content: response.statusText,
+        position: 'bottom',
+      })
+      return
+    }
+
+    if (response && response.delete) {
+      Toast.show({
+        content: '删除成功',
+        position: 'bottom',
+      })
+      // window.location.href = '/';
+    } else {
+      Toast.show({
+        content: response.statusText,
+        position: 'bottom',
+      })
+    }
+
+  }
+
+
+  console.log(props.name)
+
+  return (
+    <div>
+      <div className='item-update'>
+        {/*<Form
                     onFinish={onFinish}
                     footer={
                         <Button block type='submit' color='primary' size='large' loading={loading}>
@@ -202,66 +201,66 @@ export const ItemUpdate = (props) => {
                         />
                     </Form.Item>
                 </Form>*/}
-                <div className='item'>
-                    <div className="item-label">物品名称</div>
-                    <Input placeholder='请输入物品名称'
-                           bordered={false}
-                           size='large'
-                           allowClear={true}
-                        // ref={itemNameInputRef}
-                           value={name}
-                           onChange={e => {
-                               setName(e.target.value)
-                           }}
-                    />
-                </div>
-                <div className='item'>
-                    <div className="item-label">存储位置</div>
-                    <Input placeholder='请输入存储位置'
-                           bordered={false}
-                           size='large'
-                           allowClear={true}
-                        // ref={itemNameInputRef}
-                           value={position}
-                           onChange={e => {
-                               setPosition(e.target.value)
-                           }}
-                    />
-                </div>
-                <div className='item'>
-                    <div className="item-label">物品分类</div>
-                    <Input placeholder='请输入物品分类'
-                           bordered={false}
-                           size='large'
-                           allowClear={true}
-                        // ref={itemNameInputRef}
-                           value={category}
-                           onChange={e => {
-                               setCategory(e.target.value)
-                           }}
-                    />
-                </div>
-                <div className='item'>
-                    <div className="item-label">物品数量</div>
-                    <Input placeholder='请输入物品数量'
-                           bordered={false}
-                           size='large'
-                           allowClear={true}
-                        // ref={itemNameInputRef}
-                           value={count}
-                           onChange={e => {
-                               setCount(e.target.value)
-                           }}
-                    />
-                </div>
-                <div className='btn-div'>
-                    <Space>
-                        <Button color='danger' onClick={deleteItem} loading={deleteLoading}>删除</Button>
-                        <Button color='primary' onClick={updateItem} loading={updateLoading}>修改</Button>
-                    </Space>
-                </div>
+        <div className='item'>
+          <div className="item-label">物品名称</div>
+          <Input placeholder='请输入物品名称'
+                 bordered={false}
+                 size='large'
+                 allowClear={true}
+            // ref={itemNameInputRef}
+                 value={name}
+                 onChange={e => {
+                   setName(e.target.value)
+                 }}
+          />
+        </div>
+        <div className='item'>
+          <div className="item-label">存储位置</div>
+          <Input placeholder='请输入存储位置'
+                 bordered={false}
+                 size='large'
+                 allowClear={true}
+            // ref={itemNameInputRef}
+                 value={position}
+                 onChange={e => {
+                   setPosition(e.target.value)
+                 }}
+          />
+        </div>
+        <div className='item'>
+          <div className="item-label">物品分类</div>
+          <Input placeholder='请输入物品分类'
+                 bordered={false}
+                 size='large'
+                 allowClear={true}
+            // ref={itemNameInputRef}
+                 value={category}
+                 onChange={e => {
+                   setCategory(e.target.value)
+                 }}
+          />
+        </div>
+        <div className='item'>
+          <div className="item-label">物品数量</div>
+          <Input placeholder='请输入物品数量'
+                 bordered={false}
+                 size='large'
+                 allowClear={true}
+            // ref={itemNameInputRef}
+                 value={count}
+                 onChange={e => {
+                   setCount(e.target.value)
+                 }}
+          />
+        </div>
+        <div className='btn-div'>
+          <Space>
+            <Button color='danger' onClick={deleteItem} loading={deleteLoading}>删除</Button>
+            <Button color='primary' onClick={updateItem} loading={updateLoading}>修改</Button>
+          </Space>
+        </div>
 
-                {/*<div className='item'>
+        {/*<div className='item'>
                     <div className="item-label">存储位置</div>
                     <Input placeholder='请输入存储位置'
                            bordered={false}
@@ -272,6 +271,6 @@ export const ItemUpdate = (props) => {
                     />
                 </div>*/}
 
-            </div>
-        </div>)
+      </div>
+    </div>)
 }

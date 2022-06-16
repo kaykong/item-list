@@ -7,14 +7,14 @@ import './assets/iconfont'
  */
 
 export const Icon = (props) => {
-    // console.log(props)
+  // console.log(props)
 
-    return (
-        <div>
-            <svg className="icon" aria-hidden="true" style={props.style}>
-                <use xlinkHref={"#icon-" + props.name}></use>
-            </svg>
-        </div>
-    )
+  return (
+    <div>
+      <svg className="icon" aria-hidden="true" style={props.style}>
+        <use xlinkHref={"#icon-" + props.name}></use>
+      </svg>
+    </div>
+  )
 }
 
